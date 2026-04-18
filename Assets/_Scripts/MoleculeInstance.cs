@@ -3,11 +3,15 @@ using TMPro;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class MoleculeInstance : MonoBehaviour
 {
+    public GameObject moleculeDetailObj;
     public TextMeshPro formulaText;
-    public TextMeshPro bondTypeText;
+    public TextMeshProUGUI bondTypeDetailText;
+    public Text moleculeDetailText;
+    public TextMeshProUGUI formulaDetailText;
     public List<string> currentElements = new List<string>();
     public MoleculeDatabase db;
 
@@ -41,8 +45,10 @@ public class MoleculeInstance : MonoBehaviour
         {
             formulaText.text = match.formula;
             Debug.Log("Found Match: " + match.formula); // Check your console!
-            bondTypeText.text = match.bondDetails;
-            bondTypeText.gameObject.SetActive(true);
+            bondTypeDetailText.text = match.bondDetails;
+            moleculeDetailText.text = match.moleculeName;
+            formulaDetailText.text = match.formula;
+            moleculeDetailObj.SetActive(true);
         }
         else
         {
@@ -52,7 +58,7 @@ public class MoleculeInstance : MonoBehaviour
             string intermediate = string.Concat(counts);
             formulaText.text = intermediate;
             Debug.Log("Intermediate Name: " + intermediate); // Check your console!
-            bondTypeText.gameObject.SetActive(false);
+            moleculeDetailObj.SetActive(false);
         }
     }
 
@@ -75,8 +81,8 @@ public class MoleculeInstance : MonoBehaviour
                 formulaText.transform.LookAt(formulaText.transform.position + playerCamera.forward);
 
             // Bond Type Text faces player (only if active)
-            if (bondTypeText != null && bondTypeText.gameObject.activeSelf)
-                bondTypeText.transform.LookAt(bondTypeText.transform.position + playerCamera.forward);
+            if (moleculeDetailObj != null && moleculeDetailObj.activeSelf)
+                moleculeDetailObj.transform.LookAt(moleculeDetailObj.transform.position + playerCamera.forward);
         }
     }
 
