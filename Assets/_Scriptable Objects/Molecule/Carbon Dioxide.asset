@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 530889772b1718544993ffc8bf8e87e7, type: 3}
-  m_Name: Hydrogen Gas
+  m_Name: Carbon Dioxide
   m_EditorClassIdentifier: Assembly-CSharp::MoleculeData
-  moleculeName: Hydrogen Gas
-  formula: H2
+  moleculeName: Carbon Dioxide
+  formula: CO2
   requiredAtoms:
-  - H
-  - H
-  bondType: 1
+  - C
+  - O
+  - O
+  bondType: 2

@@ -13,7 +13,21 @@ MonoBehaviour:
   m_Name: MoleculeDatabase
   m_EditorClassIdentifier: Assembly-CSharp::MoleculeDatabase
   allMolecules:
+  - {fileID: 11400000, guid: f3f1f08569b883a4e8bd84df973cdbd5, type: 2}
+  - {fileID: 11400000, guid: 20537373be3ef4945a3c37a0ef722f60, type: 2}
+  - {fileID: 11400000, guid: fdfcaba28c50ccb469d4a962322d4a3d, type: 2}
+  - {fileID: 11400000, guid: 69896d8b1c61e70429363322c5774998, type: 2}
+  - {fileID: 11400000, guid: 606a65ff62981994ebe47c2f8da19f94, type: 2}
+  - {fileID: 11400000, guid: 05fc17c7f64da6e4cb0dac25c9d8a737, type: 2}
+  - {fileID: 11400000, guid: f91da991b62a0c04b80622cfabe6cef6, type: 2}
+  - {fileID: 11400000, guid: 6b9468f8cbb5c0d469631f5d8ba462bc, type: 2}
+  - {fileID: 11400000, guid: 0b3535db350d51a48b1df1d830db0e70, type: 2}
   - {fileID: 11400000, guid: b519f15f78457c94b8a3fa60fdf5ccf4, type: 2}
+  - {fileID: 11400000, guid: da9b206a49ca958469053b6ed471e08d, type: 2}
+  - {fileID: 11400000, guid: 092ffc2d5d7535143b09440882cd1ef1, type: 2}
+  - {fileID: 11400000, guid: d1e4191e6a0f12f41993d5be074d4e0a, type: 2}
+  - {fileID: 11400000, guid: 1262c3a618bb14b4f8833efa688d4a0a, type: 2}
   - {fileID: 11400000, guid: 9625d79249fea8b4bbb02771ca131fec, type: 2}
   - {fileID: 11400000, guid: 4fad3bed58d13884a93034ff8c98777b, type: 2}
+  - {fileID: 11400000, guid: deeffb3c2c73b104188eeaf204d2a71a, type: 2}
   - {fileID: 11400000, guid: ebbc2a5a16a6e4e4a801da55f2d564ba, type: 2}

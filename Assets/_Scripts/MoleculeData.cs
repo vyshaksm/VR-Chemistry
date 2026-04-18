@@ -10,9 +10,26 @@ public class MoleculeData : ScriptableObject
     [Header("Recipe")]
     // List of symbols required (e.g., ["H", "H", "O"])
     public List<string> requiredAtoms;
+    public string bondDetails { get; private set; }        // e.g., "Single Covalent" [cite: 30]
+    public enum BondType
+    {
+        Covalent,
+        SingleCovalent,
+        DoubleCovalent,
+        TripleCovalent
+    }
 
-    [Header("Visuals & Info")]
-    public GameObject moleculePrefab; // The 3D model with bonds [cite: 20, 24]
-    [TextArea]
-    public string bondDetails;        // e.g., "Single Covalent" [cite: 30]
+    public BondType bondType;        // Enum for bond type (for visuals) [cite: 30]
+
+    private void Awake()
+    {
+        bondDetails= bondType switch
+        {
+            BondType.Covalent => "Covalent",
+            BondType.SingleCovalent => "Single Covalent",
+            BondType.DoubleCovalent => "Double Covalent",
+            BondType.TripleCovalent => "Triple Covalent",
+            _ => "Unknown Bond Type"
+        };
+    }
 }

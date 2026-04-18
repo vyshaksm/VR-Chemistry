@@ -17,5 +17,4 @@ MonoBehaviour:
   requiredAtoms:
   - O
   - O
-  moleculePrefab: {fileID: 5235936507448984549, guid: 1381e86052faa0e4a9314857ce17e609, type: 3}
-  bondDetails: Double Covalent
+  bondType: 2
