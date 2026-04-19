@@ -1,59 +1,55 @@
 using UnityEngine;
-using DG.Tweening; // Import DOTween
+using DG.Tweening;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class AtomAnimation : MonoBehaviour
 {
     [Header("Animation Settings")]
-    [SerializeField] private float floatDistance = 0.05f; // How high it floats
-    [SerializeField] private float floatDuration = 2f;    // Speed of the float
+    [SerializeField] private float floatDistance = 0.05f;
+    [SerializeField] private float floatDuration = 2f;
 
     private Tween floatTween;
     private XRGrabInteractable grabInteractable;
     private Vector3 originalLocalPosition;
 
+    // Caches required components before the object starts running.
     void Awake()
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
-
-       // grabInteractable.selectEntered.AddListener(OnGrab);
-
-       // grabInteractable.selectExited.AddListener(OnRelease);
     }
 
+    // Stores the starting position and begins the floating motion.
     void Start()
     {
         originalLocalPosition = transform.localPosition;
         StartFloating();
     }
 
+    // Starts or restarts the looping float animation.
     public void StartFloating()
     {
-        // Safety: kill any existing tween first
         floatTween?.Kill();
-
-        // Create a smooth Y-axis loop
-        // Move from original position to +floatDistance and back
         floatTween = transform.DOLocalMoveY(transform.localPosition.y + floatDistance, floatDuration)
             .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo);
     }
 
+    // Stops the float animation when the object is grabbed.
     private void OnGrab(SelectEnterEventArgs args)
     {
-        // "When grabbed a atom another is enabled... no animation"
         floatTween?.Kill();
     }
+
+    // Restarts the float animation after the object is released.
     private void OnRelease(SelectExitEventArgs args)
     {
-        // "When released the same animation"
         StartFloating();
     }
 
+    // Cleans up the active tween when the object is destroyed.
     private void OnDestroy()
     {
-        // Best practice: cleanup tweens when object is destroyed
         floatTween?.Kill();
     }
 }

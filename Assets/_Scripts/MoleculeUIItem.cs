@@ -5,20 +5,21 @@ using UnityEngine.UI;
 public class MoleculeUIItem : MonoBehaviour
 {
     public TextMeshProUGUI nameLabel;
-    public Image discoveryIcon; // The image to enable (e.g., a checkmark or icon)
-    public string moleculeFormula; // Used to identify this UI item
+    public Image discoveryIcon;
+    public string moleculeFormula;
 
+    // Initializes the UI item with its label and hidden discovery icon.
     public void Setup(string displayName, string formula)
     {
         nameLabel.text = displayName;
         moleculeFormula = formula;
-        discoveryIcon.gameObject.SetActive(false); // Hide until discovered
+        discoveryIcon.gameObject.SetActive(false);
     }
 
+    // Reveals the discovery state for this molecule in the UI.
     public void MarkAsDiscovered()
     {
         discoveryIcon.gameObject.SetActive(true);
-        // Optional: Change text color or play a small UI animation
         nameLabel.color = Color.green;
     }
 }

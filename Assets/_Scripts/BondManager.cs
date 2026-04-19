@@ -9,6 +9,7 @@ public class BondManager : MonoBehaviour
     public AudioSource successSFX;
     public MoleculeLibraryManager libraryUI;
 
+    // Combines two atoms into a new molecule instance.
     public void OnAtomTrigger(AtomController a, AtomController b)
     {
         if (a == null || b == null || a == b)
@@ -26,6 +27,7 @@ public class BondManager : MonoBehaviour
         CreateMolecule(midPoint, elements, a.gameObject, b.gameObject);
     }
 
+    // Combines an atom and an existing molecule into a new molecule instance.
     public void OnAtomMoleculeTrigger(AtomController atom, MoleculeInstance molecule)
     {
         if (atom == null || molecule == null)
@@ -43,6 +45,7 @@ public class BondManager : MonoBehaviour
         CreateMolecule(midPoint, elements, atom.gameObject, molecule.gameObject);
     }
 
+    // Combines two existing molecules into a new molecule instance.
     public void OnMoleculeTrigger(MoleculeInstance first, MoleculeInstance second)
     {
         if (first == null || second == null || first == second)
@@ -61,39 +64,32 @@ public class BondManager : MonoBehaviour
         CreateMolecule(midPoint, elements, first.gameObject, second.gameObject);
     }
 
+    // Spawns a replacement molecule, updates its display, and notifies discovery UI.
     private void CreateMolecule(Vector3 position, List<string> elements, params GameObject[] consumedObjects)
     {
-        // 1. Clean up the ingredients
         foreach (var consumedObject in consumedObjects)
         {
             if (consumedObject != null)
                 Destroy(consumedObject);
         }
 
-        // 2. Instantiate and setup the new Molecule instance
         GameObject newMol = Instantiate(moleculePrefab, position, Quaternion.identity);
-        Vector3 targetScale = newMol.transform.localScale; // Capture the 0.45 scale
+        Vector3 targetScale = newMol.transform.localScale;
         MoleculeInstance instance = newMol.GetComponent<MoleculeInstance>();
         instance.db = db;
 
-        // 3. Populate elements silently (no UI flicker)
         foreach (var element in elements)
             instance.AddAtom(element, false);
 
-        // 4. Update the billboarded TextMeshPro labels
         instance.UpdateDisplay();
 
-        // 5. Play the "Pop" animation
         newMol.transform.localScale = Vector3.zero;
         newMol.transform.DOScale(targetScale, 0.5f).SetEase(Ease.OutBack);
 
-        // 6. Check for Discovery and update the Scroll View Library
         MoleculeData match = db.CheckMatch(instance.currentElements);
         if (match != null)
         {
             if (successSFX != null) successSFX.Play();
-
-            // This line connects to your new MoleculeLibraryManager
             if (libraryUI != null)
                 libraryUI.NotifyDiscovery(match.formula);
         }

@@ -20,17 +20,21 @@ public class MoleculeInstance : MonoBehaviour
 
     public bool IsCombining { get; private set; }
 
+    // Caches the bond manager reference for later trigger handling.
     private void Awake()
     {
         bondManager = FindFirstObjectByType<BondManager>();
+        playerCamera = Camera.main.transform;
     }
 
+    // Adds an atom symbol to the molecule and optionally refreshes the UI.
     public void AddAtom(string symbol, bool updateNow = true)
     {
         currentElements.Add(symbol);
         if (updateNow) UpdateDisplay();
     }
 
+    // Updates the molecule text and detail panel based on the current atom list.
     public void UpdateDisplay()
     {
         if (db == null)
@@ -44,7 +48,6 @@ public class MoleculeInstance : MonoBehaviour
         if (match != null)
         {
             formulaText.text = match.formula;
-            Debug.Log("Found Match: " + match.formula); // Check your console!
             bondTypeDetailText.text = match.bondDetails;
             moleculeDetailText.text = match.moleculeName;
             formulaDetailText.text = match.formula;
@@ -57,11 +60,11 @@ public class MoleculeInstance : MonoBehaviour
                                         .Select(g => g.Key + (g.Count() > 1 ? g.Count().ToString() : ""));
             string intermediate = string.Concat(counts);
             formulaText.text = intermediate;
-            Debug.Log("Intermediate Name: " + intermediate); // Check your console!
             moleculeDetailObj.SetActive(false);
         }
     }
 
+    // Locks the molecule so only one combine operation can consume it.
     public bool TryBeginCombination()
     {
         if (IsCombining)
@@ -71,21 +74,20 @@ public class MoleculeInstance : MonoBehaviour
         return true;
     }
 
+    // Rotates the molecule labels to face the player.
     void Update()
     {
-        // BILLBOARD EFFECT: Apply to both text elements
         if (playerCamera != null)
         {
-            // Formula Text faces player
             if (formulaText != null)
                 formulaText.transform.LookAt(formulaText.transform.position + playerCamera.forward);
 
-            // Bond Type Text faces player (only if active)
             if (moleculeDetailObj != null && moleculeDetailObj.activeSelf)
                 moleculeDetailObj.transform.LookAt(moleculeDetailObj.transform.position + playerCamera.forward);
         }
     }
 
+    // Detects trigger-based interactions with atoms and other molecules.
     private void OnTriggerEnter(Collider other)
     {
         if (bondManager == null || IsCombining)

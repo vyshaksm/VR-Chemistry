@@ -9,30 +9,28 @@ public class MoleculeLibraryManager : MonoBehaviour
 
     private Dictionary<string, MoleculeUIItem> activeUIItems = new Dictionary<string, MoleculeUIItem>();
 
+    // Populates the molecule library UI when the manager starts.
     void Start()
     {
         PopulateLibrary();
     }
 
+    // Rebuilds the scroll list from the molecule database.
     private void PopulateLibrary()
     {
-        // Clear existing items if any
         foreach (Transform child in contentPanel) Destroy(child.gameObject);
 
-        // Create a list item for every molecule defined in your ScriptableObject
         foreach (var molecule in db.allMolecules)
         {
             GameObject newItem = Instantiate(uiItemPrefab, contentPanel);
             MoleculeUIItem script = newItem.GetComponent<MoleculeUIItem>();
 
             script.Setup(molecule.moleculeName, molecule.formula);
-
-            // Store in dictionary for quick lookup by formula
             activeUIItems.Add(molecule.formula, script);
         }
     }
 
-    // Call this from BondManager when a successful match is made
+    // Marks a discovered molecule entry as unlocked in the UI.
     public void NotifyDiscovery(string formula)
     {
         if (activeUIItems.ContainsKey(formula))

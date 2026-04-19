@@ -13,7 +13,7 @@ public class AtomController : MonoBehaviour
     [SerializeField] private MeshRenderer sphereRenderer;
 
     [Header("State")]
-    public bool canBond = false; // Prevents bonding while still on the spawner
+    public bool canBond = false;
     public bool IsCombining { get; private set; }
 
     private Transform playerCamera;
@@ -21,44 +21,46 @@ public class AtomController : MonoBehaviour
     private XRGrabInteractable grabInteractable;
     private Tween floatTween;
 
+    // Caches scene references and subscribes to grab events.
     private void Awake()
     {
         bondManager = FindFirstObjectByType<BondManager>();
         grabInteractable = GetComponent<XRGrabInteractable>();
         playerCamera = Camera.main.transform;
 
-        // Subscribe to XR events
         grabInteractable.selectEntered.AddListener(OnGrab);
         grabInteractable.selectExited.AddListener(OnRelease);
     }
 
+    // Initializes the atom visuals and starts the floating animation.
     private void Start()
     {
         InitializeAtom();
         StartFloating();
     }
 
+    // Applies the atom symbol and color from its data asset.
     public void InitializeAtom()
     {
         if (data == null) return;
 
         symbolText.text = data.symbol;
 
-        // Apply color from ScriptableObject with 50% transparency
         Color c = data.atomColor;
         c.a = 0.5f;
         sphereRenderer.material.color = c;
     }
 
+    // Keeps the symbol text facing the player camera.
     private void Update()
     {
-        // Billboarding: Always face the player
         if (playerCamera != null && symbolText != null)
         {
             symbolText.transform.LookAt(symbolText.transform.position + playerCamera.forward);
         }
     }
 
+    // Starts or restarts the atom floating animation.
     public void StartFloating()
     {
         floatTween?.Kill();
@@ -67,21 +69,20 @@ public class AtomController : MonoBehaviour
             .SetLoops(-1, LoopType.Yoyo);
     }
 
+    // Stops floating and marks the atom as available for bonding.
     private void OnGrab(SelectEnterEventArgs args)
     {
-        // Stop animation so it doesn't fight the player's hand
         floatTween?.Kill();
-
-        // IMPORTANT: Now this atom is allowed to participate in chemistry
         canBond = true;
     }
 
+    // Restarts floating when the atom is released.
     private void OnRelease(SelectExitEventArgs args)
     {
-        // Resume floating animation when dropped
         StartFloating();
     }
 
+    // Locks the atom so it can only be consumed by one combine flow.
     public bool TryBeginCombination()
     {
         if (IsCombining) return false;
@@ -89,18 +90,16 @@ public class AtomController : MonoBehaviour
         return true;
     }
 
+    // Detects trigger-based interactions with atoms and molecules.
     private void OnTriggerEnter(Collider other)
     {
-        // SAFETY: If bondManager is missing, already combining, 
-        // or hasn't been picked up yet, do nothing.
         if (bondManager == null || IsCombining || !canBond)
             return;
 
-        // Check for Atom-to-Atom collision
         AtomController otherAtom = other.GetComponent<AtomController>();
         if (otherAtom != null && otherAtom.canBond && !otherAtom.IsCombining)
         {
-            // Use InstanceID to ensure only one of the two atoms triggers the bond
+            // Only one of the overlapping atoms should start the combine flow.
             if (gameObject.GetInstanceID() < other.gameObject.GetInstanceID())
             {
                 bondManager.OnAtomTrigger(this, otherAtom);
@@ -108,7 +107,6 @@ public class AtomController : MonoBehaviour
             return;
         }
 
-        // Check for Atom-to-Molecule collision
         MoleculeInstance molecule = other.GetComponentInParent<MoleculeInstance>();
         if (molecule != null && !molecule.IsCombining)
         {
@@ -116,6 +114,7 @@ public class AtomController : MonoBehaviour
         }
     }
 
+    // Removes listeners and active tweens during cleanup.
     private void OnDestroy()
     {
         floatTween?.Kill();

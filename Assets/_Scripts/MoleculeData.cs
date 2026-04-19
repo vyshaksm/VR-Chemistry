@@ -4,13 +4,12 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "NewMoleculeData", menuName = "Chemistry/Molecule Data")]
 public class MoleculeData : ScriptableObject
 {
-    public string moleculeName; // e.g., "Water" [cite: 30]
-    public string formula;      // e.g., "H2O" [cite: 30]
+    public string moleculeName;
+    public string formula;
 
     [Header("Recipe")]
-    // List of symbols required (e.g., ["H", "H", "O"])
     public List<string> requiredAtoms;
-    public string bondDetails { get; private set; }        // e.g., "Single Covalent" [cite: 30]
+    public string bondDetails { get; private set; }
     public enum BondType
     {
         Covalent,
@@ -19,8 +18,9 @@ public class MoleculeData : ScriptableObject
         TripleCovalent
     }
 
-    public BondType bondType;        // Enum for bond type (for visuals) [cite: 30]
+    public BondType bondType;
 
+    // Derives the displayable bond description from the selected bond type.
     private void Awake()
     {
         bondDetails= bondType switch
