@@ -1358,9 +1358,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoleculeInstance
   moleculeDetailObj: {fileID: 389641215914125162}
   formulaText: {fileID: 4179566691867489005}
-  bondTypeDetailText: {fileID: 1483183080903052927}
+  bondTypeDetailText: {fileID: 337888668357161334}
   moleculeDetailText: {fileID: 8046188144118633614}
-  formulaDetailText: {fileID: 337888668357161334}
+  formulaDetailText: {fileID: 1907601437736163159}
   currentElements: []
   db: {fileID: 11400000, guid: b09a7fef833f56b49bf8f2c5465cfe81, type: 2}
 --- !u!114 &4306134367543281915
